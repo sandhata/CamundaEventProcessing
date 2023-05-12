@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_0e5unb9" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="4.6.0">
+  <bpmn:process id="message_throw_catch_process" name="Message Throw Catch Process" isExecutable="true">
+    <bpmn:documentation>Message Throw Catch Process Doc</bpmn:documentation>
+    <bpmn:startEvent id="StartEvent_1">
+      <bpmn:outgoing>Flow_1lzgce2</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:sequenceFlow id="Flow_1lzgce2" sourceRef="StartEvent_1" targetRef="Activity_1eaat4s" />
+    <bpmn:serviceTask id="Activity_1eaat4s" name="Message throw input service" camunda:delegateExpression="#{MessageThrowInputService}">
+      <bpmn:documentation>MessageThrowInputServiceDoc</bpmn:documentation>
+      <bpmn:extensionElements>
+        <camunda:inputOutput>
+          <camunda:outputParameter name="EmployeeId">#{Employee.employeeId}</camunda:outputParameter>
+        </camunda:inputOutput>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_1lzgce2</bpmn:incoming>
+      <bpmn:outgoing>Flow_1jjsgsn</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="Flow_1jjsgsn" sourceRef="Activity_1eaat4s" targetRef="Event_1avpcub" />
+    <bpmn:intermediateThrowEvent id="Event_1avpcub" name="Link Throw Event">
+      <bpmn:incoming>Flow_1jjsgsn</bpmn:incoming>
+      <bpmn:linkEventDefinition id="LinkEventDefinition_02xbr8p" name="LinkThrowEvent" />
+    </bpmn:intermediateThrowEvent>
+    <bpmn:intermediateCatchEvent id="Event_0664gks" name="Link Catch Event">
+      <bpmn:outgoing>Flow_0odlo8n</bpmn:outgoing>
+      <bpmn:linkEventDefinition id="LinkEventDefinition_09tyebc" name="LinkThrowEvent" />
+    </bpmn:intermediateCatchEvent>
+    <bpmn:sequenceFlow id="Flow_0odlo8n" sourceRef="Event_0664gks" targetRef="Event_0hki02p" />
+    <bpmn:intermediateCatchEvent id="Event_0hki02p" name="MessageCatchEvent" camunda:asyncAfter="true">
+      <bpmn:incoming>Flow_0odlo8n</bpmn:incoming>
+      <bpmn:outgoing>Flow_0thwbr0</bpmn:outgoing>
+      <bpmn:messageEventDefinition id="MessageEventDefinition_0hz3ucy" messageRef="Message_13oetc4" />
+    </bpmn:intermediateCatchEvent>
+    <bpmn:sequenceFlow id="Flow_0thwbr0" sourceRef="Event_0hki02p" targetRef="Activity_0570zh3" />
+    <bpmn:serviceTask id="Activity_0570zh3" name="Message catch output service" camunda:delegateExpression="#{MessageCatchOutputService}">
+      <bpmn:documentation>MessageCatchOutputServiceDoc</bpmn:documentation>
+      <bpmn:incoming>Flow_0thwbr0</bpmn:incoming>
+      <bpmn:outgoing>Flow_0zbctdn</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:endEvent id="Event_1inskvh">
+      <bpmn:incoming>Flow_0zbctdn</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_0zbctdn" sourceRef="Activity_0570zh3" targetRef="Event_1inskvh" />
+  </bpmn:process>
+  <bpmn:message id="Message_13oetc4" name="Message_catch_event" />
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="message_throw_catch_process">
+      <bpmndi:BPMNEdge id="Flow_0zbctdn_di" bpmnElement="Flow_0zbctdn">
+        <di:waypoint x="470" y="260" />
+        <di:waypoint x="532" y="260" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0thwbr0_di" bpmnElement="Flow_0thwbr0">
+        <di:waypoint x="308" y="260" />
+        <di:waypoint x="370" y="260" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0odlo8n_di" bpmnElement="Flow_0odlo8n">
+        <di:waypoint x="215" y="260" />
+        <di:waypoint x="272" y="260" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1jjsgsn_di" bpmnElement="Flow_1jjsgsn">
+        <di:waypoint x="370" y="117" />
+        <di:waypoint x="432" y="117" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1lzgce2_di" bpmnElement="Flow_1lzgce2">
+        <di:waypoint x="215" y="117" />
+        <di:waypoint x="270" y="117" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
+        <dc:Bounds x="179" y="99" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="202" y="142" width="90" height="40" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0caflj4_di" bpmnElement="Activity_1eaat4s">
+        <dc:Bounds x="270" y="77" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1kb2okm_di" bpmnElement="Event_1avpcub">
+        <dc:Bounds x="432" y="99" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="408" y="142" width="86" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_07pasow_di" bpmnElement="Event_0664gks">
+        <dc:Bounds x="179" y="242" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="156" y="218" width="84" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0zyorau_di" bpmnElement="Event_0hki02p">
+        <dc:Bounds x="272" y="242" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="246" y="205" width="87" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1myzmtu_di" bpmnElement="Activity_0570zh3">
+        <dc:Bounds x="370" y="220" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1inskvh_di" bpmnElement="Event_1inskvh">
+        <dc:Bounds x="532" y="242" width="36" height="36" />
+      </bpmndi:BPMNShape>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>
